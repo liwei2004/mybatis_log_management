@@ -1,15 +1,5 @@
 package cn.itcast.aop;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import cn.itcast.mapper.OperationLogMapper;
 import cn.itcast.pojo.OperationLog;
 import cn.itcast.service.OperationLogService;
 import cn.itcast.utils.DataUtils;
@@ -20,9 +10,15 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+
+/**
+ * 定义通知类
+ */
 @Component
 @Aspect
 public class OperateAdvice {
@@ -41,7 +37,7 @@ public class OperateAdvice {
 
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		op.setOperateTime(sdf.format(new Date()));
-		op.setOperateUser(DataUtils.getRandStr(8));// 从Session中获取当前登录用户 .
+		op.setOperateUser(DataUtils.getRandStr(8));//模拟获取用户的id  实际业务要从Session中获取当前登录用户 .
 
         //设置拦截类名
 		op.setOperateClass(pjp.getTarget().getClass().getName());
@@ -53,7 +49,6 @@ public class OperateAdvice {
 		op.setParamAndValue(Arrays.toString(args));
 
 
-
 		long start_time = System.currentTimeMillis();
 
 		//放行
@@ -61,7 +56,6 @@ public class OperateAdvice {
 
 		long end_time = System.currentTimeMillis();
 		op.setCostTime(end_time - start_time);
-
 
 
 		if(object != null){

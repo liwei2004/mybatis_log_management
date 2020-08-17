@@ -8,7 +8,7 @@
                             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
                             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-<!--
+
     <bean id="readDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${jdbc.read.driver}"></property>
         <property name="jdbcUrl" value="${jdbc.read.url}"></property>
@@ -23,25 +23,26 @@
         <property name="user" value="${jdbc.write.username}"></property>
         <property name="password" value="${jdbc.write.password}"></property>
     </bean>
--->
+
     <!-- 继承自 AbstractRoutingDataSource -->
-    <!--     <bean id="dataSource" class="cn.itcast.aop.datasource.ChooseDataSource">
-            <property name="targetDataSources">
-                <map key-type="java.lang.String" value-type="javax.sql.DataSource">
-                    <entry key="write" value-ref="writeDataSource"/>
-                    <entry key="read" value-ref="readDataSource"/>
-                </map>
-            </property>
+     <bean id="dataSource" class="cn.itcast.aop.datasource.ChooseDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String" value-type="javax.sql.DataSource">
+                <entry key="write" value-ref="writeDataSource"/>
+                <entry key="read" value-ref="readDataSource"/>
+            </map>
+        </property>
 
-            <property name="defaultTargetDataSource" ref="writeDataSource"/>
+        <property name="defaultTargetDataSource" ref="writeDataSource"/>
 
-            <property name="methodType">
-                <map key-type="java.lang.String">
-                    <entry key="read" value=",get,select,count,list,query,find"/>
-                    <entry key="write" value=",add,create,update,delete,remove,insert"/>
-                </map>
-            </property>
-        </bean>
-     -->
+        <property name="methodType">
+            <map key-type="java.lang.String">
+                <!--如果是包含value中的某个方法，默认是读的操作，走从库-->
+                <entry key="read" value=",get,select,count,list,query,find"/>
+                <!--如果是包含value中的某个方法，默认是写的操作，走主库-->
+                <entry key="write" value=",add,create,update,delete,remove,insert"/>
+            </map>
+        </property>
+     </bean>
 
 </beans>
